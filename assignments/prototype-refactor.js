@@ -26,12 +26,17 @@ Prototype Refactor
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
-function GameObject(obj) {
-    this.createdAt = obj.createdAt;
-    this.name = obj.name;
-    this.dimensions = obj.dimensions;
-  }
-  GameObject.prototype.destroy = function() { return `${this.name} was removed from the game.`};
+class GameObject {
+    constructor(obj) {
+        this.createdAt = obj.createdAt;
+        this.name = obj.name;
+        this.dimensions = obj.dimensions;
+    }
+
+    destroy() {
+        return `${this.name} was removed from the game.`;
+    }
+}
   
   /*
     === CharacterStats ===
@@ -39,13 +44,20 @@ function GameObject(obj) {
     * takeDamage() // prototype method -> returns the string '<object name> took damage.'
     * should inherit destroy() from GameObject's prototype
   */
-  
-  function CharacterStats(obj) {
-    GameObject.call(this, obj);
-    this.healthPoints = obj.healthPoints;
-  }
-  CharacterStats.prototype = Object.create(GameObject.prototype);
-  CharacterStats.prototype.takeDamage = function() { return `${this.name} took damage.`};
+
+class CharacterStats extends GameObject{
+    constructor(obj) {
+        super(obj);
+        this.healthPoints = obj.healthPoints;
+    }
+    
+    checkHealth(target) {
+        return target.healthPoints <= 0;
+    }
+    takeDamage() {
+        return `${this.name} took damage.`;
+    }
+}
   
   /*
     === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -57,15 +69,18 @@ function GameObject(obj) {
     * should inherit takeDamage() from CharacterStats
   */
   
-  function Humanoid(obj) {
-    CharacterStats.call(this, obj);
-    this.team = obj.team;
-    this.weapons = obj.weapons;
-    this.language = obj.language;
-  }
-  Humanoid.prototype = Object.create(CharacterStats.prototype);
-  Humanoid.prototype.greet = function(){ return `${this.name} offers a greeting in ${this.language}.`};
-  
+class Humanoid extends CharacterStats {
+    constructor(obj) {
+        super(obj);
+        this.team = obj.team;
+        this.weapons = obj.weapons;
+        this.language = obj.language;
+    }
+
+    greet() {
+        return `${this.name} offers a greeting in ${this.language}.`  
+    }
+}
    
   /*
     * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -143,34 +158,34 @@ function GameObject(obj) {
     // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
     // * Create two new objects, one a villain and one a hero and fight it out with methods!
   
-  function checkHealth(target) {
-    return target.healthPoints <= 0;
-  }
-  
-  function Villain(obj) {
-    Humanoid.call(this, obj);
-  }
-  Villain.prototype = Object.create(Humanoid.prototype);
-  Villain.prototype.attack = function(target) {
-    target.healthPoints = target.healthPoints - 2;
-    if (checkHealth(target)) {
-      return target.destroy();
+
+class Villain extends Humanoid {
+    constructor(obj) {
+        super(obj);
     }
-    return `${this.name} attacked ${target.name} for 2 damage.\n ${target.name} has ${target.healthPoints} HP remaining.`;
-  
-  }
-  Villain.prototype.attackSpecial = function(target) {
-    target.healthPoints = target.healthPoints - 3;
-    if (checkHealth(target)) {
-      return target.destroy();
+    
+    attack(target) {
+        target.healthPoints = target.healthPoints - 2;
+        if (this.checkHealth(target)) {
+            return target.destroy();
+        }
+        return `${this.name} attacked ${target.name} for 2 damage.\n ${target.name} has ${target.healthPoints} HP remaining.`;
     }
-    return `${this.name} attacked ${target.name} for 3 damage.\n ${target.name} has ${target.healthPoints} HP remaining.`;
-  }
+    
+    attackSpecial(target) {
+        target.healthPoints = target.healthPoints - 3;
+        if (this.checkHealth(target)) {
+            return target.destroy();
+        }
+        return `${this.name} attacked ${target.name} for 3 damage.\n ${target.name} has ${target.healthPoints} HP remaining.`;
+    }
+}
   
-  function Hero(obj) {
-    Humanoid.call(this, obj);
-  }
-  Hero.prototype = Object.create(Villain.prototype);
+class Hero extends Villain {
+    constructor(obj) {
+        super(obj);
+    }
+}
   
   const bob = new Hero({
     createdAt: new Date(),
