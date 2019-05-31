@@ -53,7 +53,16 @@ class Student extends Person {
 class ProjectManager extends Instructor {
     constructor(attributes) {
         super(attributes);
+        this.gradClassName = attributes.gradClassName;
+        this.favInstructor = attributes.favInstructor;
+    }
 
+    standUp(channel) {
+        console.log(`${this.name} announces to ${channel}, @channel standy times!`);
+    }
+
+    debugsCode(student, subject) {
+        console.log(`${this.name} debugs ${student.name}'s code on ${subject}`);
     }
 }
 
@@ -84,3 +93,11 @@ const sofia = new Student({name: `Sofia Levin`, age: 26, location: `Texas`, prev
 console.log(ace.listsSubjects());
 console.log(ace.PRAssignment(`JavaScript II`));
 console.log(sofia.sprintChallenge(`Advanced CSS`));
+
+// Project Manager Objects
+
+const asa = new ProjectManager({name: `Asa Shalom`, age: 27, location: `Arizona`, favLanguage: `React`, specialty: `Vaping`, catchPhrase: `Write a book!`, gradClassName: `Web15`, favInstructor: `Dan Frehner`});
+const ajBrush = new ProjectManager({name: `AJ Brush`, age: 27, location: `East Coast`, favLanguage: `C#`, specialty: `Skydiving`, catchPhrase: `Let's go!`, gradClassName: `Web17`, favInstructor: `Cam Pope`});
+
+console.log(asa.standUp(`webpt_asa`));
+console.log(ajBrush.debugsCode(ace, `Preprocessing II`));
