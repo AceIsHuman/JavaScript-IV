@@ -27,6 +27,20 @@ class Instructor extends Person {
     grade(student, subject) {
         console.log(`${student.name} receives a perfect score on ${subject}.`);
     }
+
+    addOrSubPoints(student) {
+        if (Math.ceil(Math.random() * 10) > 5) {
+            student.grade = student.grade + Math.ceil(Math.random() * 10);
+            if (student.grade > 100) {
+                student.grade = 100;
+            }
+        } else {
+            student.grade = student.grade - Math.ceil(Math.random() * 10);
+            if (student.grade < 0) {
+                student.grade = 0;
+            }
+        } console.log(`${student.name}'s grade is now ${student.grade}`);
+    } 
 }
 
 class Student extends Person {
@@ -35,6 +49,7 @@ class Student extends Person {
         this.previousBackground = attributes.previousBackground;
         this.className = attributes.className;
         this.favSubjects = attributes.favSubjects;
+        this.grade = attributes.grade;
     }
 
     listsSubjects() {
@@ -47,6 +62,14 @@ class Student extends Person {
 
     sprintChallenge(subject) {
         console.log(`${this.name} has begun sprint challenge on ${subject}.`);
+    }
+
+    graduate() {
+        if (this.grade >= 70) {
+            console.log(`${this.name} is ready for graduation!`);
+        } else {
+            console.log(`${this.name} requires more work to graduate.`);
+        }
     }
 }
 
@@ -87,8 +110,8 @@ console.log(danLevy.demo(`CSS Compilers`));
 
 // Student Class Objects
 
-const ace = new Student({name: `Aciel Ochoa`, age: 24, location: `Texas`, previousBackground: `Retail`, className: `WebPT7`, favSubjects: [`HTML`, `CSS`, `JavaScript`]});
-const sofia = new Student({name: `Sofia Levin`, age: 26, location: `Texas`, previousBackground: `Front End`, className: `WebPT7`, favSubjects: [`HTML`, `CSS`, `JavaScript`]});
+const ace = new Student({name: `Aciel Ochoa`, age: 24, location: `Texas`, previousBackground: `Retail`, className: `WebPT7`, favSubjects: [`HTML`, `CSS`, `JavaScript`], grade: 68});
+const sofia = new Student({name: `Sofia Levin`, age: 26, location: `Texas`, previousBackground: `Front End`, className: `WebPT7`, favSubjects: [`HTML`, `CSS`, `JavaScript`], grade: 92});
 
 console.log(ace.listsSubjects());
 console.log(ace.PRAssignment(`JavaScript II`));
@@ -101,3 +124,9 @@ const ajBrush = new ProjectManager({name: `AJ Brush`, age: 27, location: `East C
 
 console.log(asa.standUp(`webpt_asa`));
 console.log(ajBrush.debugsCode(ace, `Preprocessing II`));
+
+console.log(asa.addOrSubPoints(ace));
+console.log(ace.graduate());
+
+console.log(ajBrush.addOrSubPoints(sofia));
+console.log(sofia.graduate());
