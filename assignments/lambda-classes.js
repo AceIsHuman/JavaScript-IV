@@ -32,7 +32,21 @@ class Instructor extends Person {
 class Student extends Person {
     constructor(attributes) {
         super(attributes);
+        this.previousBackground = attributes.previousBackground;
+        this.className = attributes.className;
+        this.favSubjects = attributes.favSubjects;
+    }
 
+    listsSubjects() {
+        this.favSubjects.forEach(subject => console.log(subject));
+    }
+
+    PRAssignment(subject) {
+        console.log(`${this.name} has submitted a PR for ${subject}.`);
+    }
+
+    sprintChallenge(subject) {
+        console.log(`${this.name} has begun sprint challenge on ${subject}.`);
     }
 }
 
@@ -61,3 +75,12 @@ const danLevy = new Instructor({name: `Dan Levy`, age: 32, location: `California
 console.log(danLevy.speak());
 console.log(danFrehner.grade(george, `JavaScript III`));
 console.log(danLevy.demo(`CSS Compilers`));
+
+// Student Class Objects
+
+const ace = new Student({name: `Aciel Ochoa`, age: 24, location: `Texas`, previousBackground: `Retail`, className: `WebPT7`, favSubjects: [`HTML`, `CSS`, `JavaScript`]});
+const sofia = new Student({name: `Sofia Levin`, age: 26, location: `Texas`, previousBackground: `Front End`, className: `WebPT7`, favSubjects: [`HTML`, `CSS`, `JavaScript`]});
+
+console.log(ace.listsSubjects());
+console.log(ace.PRAssignment(`JavaScript II`));
+console.log(sofia.sprintChallenge(`Advanced CSS`));
